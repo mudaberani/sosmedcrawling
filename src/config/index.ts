@@ -15,8 +15,6 @@ export const config = {
   },
   tiktok: {
     isTikTok: process.env.IS_TIKTOK === 'true',
-    username: process.env.TIKTOK_USERNAME!,
-    password: process.env.TIKTOK_PASSWORD!,
     profile: process.env.TIKTOK_PROFILE!,
     hashtag: process.env.TIKTOK_HASHTAG!,
     totalPosts: Number(process.env.TIKTOK_TOTAL_POSTS!),
