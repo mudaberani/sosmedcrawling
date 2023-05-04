@@ -8,6 +8,6 @@ import FileStorage from './storage/FileStorage';
   await crawler.init();
   await crawler.login();
   await crawler.dismissNotNowButtons();
-  await crawler.crawlHashtag('aniesbaswedan', 100);
+  await crawler.crawlHashtag('aniesbaswedan', 1000);
   await crawler.close();
 })();
