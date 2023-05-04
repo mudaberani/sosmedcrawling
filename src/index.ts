@@ -1,11 +1,15 @@
 import InstagramCrawler from './services/InstagramCrawler';
+import TikTokCrawler from './services/TikTokCrawler';
 import FileStorage from './storage/FileStorage';
 import { config } from './config';
 
 (async () => {
   const storage = new FileStorage();
   const Instagram = new InstagramCrawler(storage);
+  const TikTok = new TikTokCrawler(storage);
+
   const { isInstagram } = config.instagram;
+  const { isTikTok } = config.tiktok;
 
   if (isInstagram) {
     const { isHashtag } = config.instagram;
@@ -17,6 +21,17 @@ import { config } from './config';
       await Instagram.dismissNotNowButtons();
       await Instagram.crawlHashtag(hashtag, totalPosts);
       await Instagram.close();
+    }
+  }
+
+  if (isTikTok) {
+    const { isHashtag } = config.tiktok;
+
+    if (isHashtag) {
+      const { hashtag, totalPosts } = config.tiktok;
+      await TikTok.init();
+      await TikTok.crawlHashtag(hashtag, totalPosts);
+      await TikTok.close();
     }
   }
 })();

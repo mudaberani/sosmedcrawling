@@ -13,6 +13,16 @@ export const config = {
     isProfile: process.env.INSTAGRAM_IS_PROFILE === 'true',
     isHashtag: process.env.INSTAGRAM_IS_HASHTAG === 'true',
   },
+  tiktok: {
+    isTikTok: process.env.IS_TIKTOK === 'true',
+    username: process.env.TIKTOK_USERNAME!,
+    password: process.env.TIKTOK_PASSWORD!,
+    profile: process.env.TIKTOK_PROFILE!,
+    hashtag: process.env.TIKTOK_HASHTAG!,
+    totalPosts: Number(process.env.TIKTOK_TOTAL_POSTS!),
+    isProfile: process.env.TIKTOK_IS_PROFILE === 'true',
+    isHashtag: process.env.TIKTOK_IS_HASHTAG === 'true',
+  },
   viewport: {
     width: 1920,
     height: 1080,
