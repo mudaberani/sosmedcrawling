@@ -11,4 +11,7 @@ export const config = {
     width: 1920,
     height: 1080,
   },
+  browser: {
+    headless: process.env.BROWSER_HEADLESS === 'true',
+  },
 };

@@ -12,7 +12,8 @@ class InstagramCrawler {
   }
 
   async init() {
-    this.browser = await chromium.launch({ headless: false });
+    const { headless } = config.browser;
+    this.browser = await chromium.launch({ headless: headless });
     const context = await this.browser.newContext();
 
     this.page = await context.newPage();
@@ -72,7 +73,7 @@ class InstagramCrawler {
 
       if ((i + 1) % 10 === 0) {
         await this.page.evaluate(() => {
-          window.scrollBy(0, -600);
+          window.scrollBy(0, -1920);
         });
 
         this.saveToFile(hashtag, allUrls);
