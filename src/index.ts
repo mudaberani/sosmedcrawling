@@ -3,11 +3,11 @@ import FileStorage from './storage/FileStorage';
 
 (async () => {
   const storage = new FileStorage();
-  const crawler = new InstagramCrawler(storage);
+  const Instagram = new InstagramCrawler(storage);
 
-  await crawler.init();
-  await crawler.login();
-  await crawler.dismissNotNowButtons();
-  await crawler.crawlHashtag('aniesbaswedan', 1000);
-  await crawler.close();
+  await Instagram.init();
+  await Instagram.login();
+  await Instagram.dismissNotNowButtons();
+  await Instagram.crawlHashtag('aniesbaswedan', 1000);
+  await Instagram.close();
 })();
