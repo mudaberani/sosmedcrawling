@@ -100,6 +100,8 @@ class FileStorage implements Storage {
         );
         if (image) {
           imageUrl = image.url;
+        } else {
+          imageUrl = post.image_versions2.candidates[0]?.url || null;
         }
       }
 
