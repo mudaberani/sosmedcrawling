@@ -13,7 +13,7 @@ import CsvMergerService from './services/CsvMergerService';
   const { isTikTok } = config.tiktok;
 
   if (isInstagram) {
-    const { isHashtag } = config.instagram;
+    const { isHashtag, isProfile } = config.instagram;
 
     if (isHashtag) {
       const { hashtag, totalPosts } = config.instagram;
@@ -25,6 +25,20 @@ import CsvMergerService from './services/CsvMergerService';
 
       const sourceDir = 'results/instagram/hashtags';
       const name = hashtag;
+      const outputDir = `${sourceDir}/merged`;
+      await CsvMergerService.mergeCsvFiles(sourceDir, name, outputDir);
+    }
+
+    if (isProfile) {
+      const { profile, totalPosts } = config.instagram;
+      await Instagram.init();
+      await Instagram.login();
+      await Instagram.dismissNotNowButtons();
+      await Instagram.crawlProfile(profile, totalPosts);
+      await Instagram.close();
+
+      const sourceDir = 'results/instagram/profiles';
+      const name = profile;
       const outputDir = `${sourceDir}/merged`;
       await CsvMergerService.mergeCsvFiles(sourceDir, name, outputDir);
     }

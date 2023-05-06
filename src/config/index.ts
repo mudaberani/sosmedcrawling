@@ -13,6 +13,7 @@ export const config = {
     isProfile: process.env.INSTAGRAM_IS_PROFILE === 'true',
     isHashtag: process.env.INSTAGRAM_IS_HASHTAG === 'true',
     fbDtsg: process.env.INSTAGRAM_FB_DTSG!,
+    cookie: process.env.INSTAGRAM_COOKIE!,
   },
   tiktok: {
     isTikTok: process.env.IS_TIKTOK === 'true',

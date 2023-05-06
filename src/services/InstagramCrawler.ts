@@ -76,13 +76,47 @@ class InstagramCrawler {
           window.scrollBy(0, -1920);
         });
 
-        this.saveToFile(hashtag, allUrls);
+        this.saveToFile('hashtags', hashtag, allUrls);
         allUrls.clear();
       }
     }
 
     if (allUrls.size > 0) {
-      this.saveToFile(hashtag, allUrls);
+      this.saveToFile('hashtags', hashtag, allUrls);
+    }
+  }
+
+  async crawlProfile(username: string, totalPosts: number) {
+    await this.page.goto(`https://www.instagram.com/${username}/`);
+
+    await this.page.waitForTimeout(Math.floor(Math.random() * 4000) + 1000);
+    await this.page.waitForLoadState('networkidle');
+
+    const allUrls: Set<string> = new Set();
+    const totalScrolls = Math.ceil(totalPosts / 10);
+    for (let i = 0; i < totalScrolls; i++) {
+      const urls = await this.page.evaluate(() => {
+        const links = document.querySelectorAll<HTMLAnchorElement>('article a');
+        const urls = Array.from(links).map((link) => link.href);
+        window.scrollBy(0, window.innerHeight);
+        return urls;
+      });
+
+      urls.forEach((url) => allUrls.add(url));
+      await this.page.waitForTimeout(10000);
+
+      if ((i + 1) % 10 === 0) {
+        await this.page.evaluate(() => {
+          window.scrollBy(0, -1920);
+        });
+
+        this.saveToFile('profiles', username, allUrls);
+        allUrls.clear();
+      }
+    }
+
+    if (allUrls.size > 0) {
+      this.saveToFile('profiles', username, allUrls);
     }
   }
 
@@ -90,8 +124,8 @@ class InstagramCrawler {
     await this.browser.close();
   }
 
-  private saveToFile(hashtag: string, allUrls: Set<string>) {
-    const filePath = this.storage.save('instagram', 'hashtags', hashtag, allUrls);
+  private saveToFile(category: string, hashtag: string, allUrls: Set<string>) {
+    const filePath = this.storage.save('instagram', category, hashtag, allUrls);
   }
 }
 

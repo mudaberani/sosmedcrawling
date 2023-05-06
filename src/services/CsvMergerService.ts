@@ -31,7 +31,12 @@ class CsvMergerService {
     }
     mergedData = Array.from(uniqueDataMap.values()).sort((a, b) => new Date(b.taken_at).getTime() - new Date(a.taken_at).getTime());
 
-    const outputFilePath = path.join(outputDir, `${name}.csv`);
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir);
+    }
+
+    const timestamp = new Date().toISOString().slice(0, 10);
+    const outputFilePath = path.join(outputDir, `${name}-${timestamp}.csv`);
     const writeStream = fs.createWriteStream(outputFilePath);
 
     writeStream.write(Object.keys(mergedData[0]).join(',') + '\n');
