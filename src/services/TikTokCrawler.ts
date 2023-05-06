@@ -61,7 +61,8 @@ class TikTokCrawler {
   }
 
   private saveToFile(hashtag: string, allUrls: Set<string>) {
-    this.storage.save(hashtag, allUrls);
+    const filePath = this.storage.save('tiktok', 'hashtags', hashtag, allUrls);
+    console.log(`File tiktok hashtags saved to: ${filePath}`);
   }
 }
 

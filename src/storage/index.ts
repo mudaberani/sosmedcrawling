@@ -1,3 +1,3 @@
 export interface Storage {
-  save(hashtag: string, data: Set<string>): void;
+  save(platform: string, category: string, name: string, data: Set<string>): string;
 }
