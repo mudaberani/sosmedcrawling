@@ -2,7 +2,7 @@ import InstagramCrawler from './services/InstagramCrawler';
 import TikTokCrawler from './services/TikTokCrawler';
 import FileStorage from './storage/FileStorage';
 import { config } from './config';
-import InstagramDetailService from './services/InstagramDetailService';
+import CsvMergerService from './services/CsvMergerService';
 
 (async () => {
   const storage = new FileStorage();
@@ -22,6 +22,11 @@ import InstagramDetailService from './services/InstagramDetailService';
       await Instagram.dismissNotNowButtons();
       await Instagram.crawlHashtag(hashtag, totalPosts);
       await Instagram.close();
+
+      const sourceDir = 'results/instagram/hashtags';
+      const name = hashtag;
+      const outputDir = `${sourceDir}/merged`;
+      await CsvMergerService.mergeCsvFiles(sourceDir, name, outputDir);
     }
   }
 

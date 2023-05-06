@@ -25,10 +25,12 @@
   "dependencies": {
     "axios": "^1.4.0",
     "dotenv": "^10.0.0",
+    "papaparse": "^5.4.1",
     "playwright": "^1.33.0"
   },
   "devDependencies": {
     "@types/node": "^16.11.12",
+    "@types/papaparse": "^5.3.7",
     "jest": "^27.5.1",
     "jest-circus": "^27.5.1",
     "jest-environment-node": "^27.5.1",
