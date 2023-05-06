@@ -12,6 +12,7 @@ export const config = {
     totalPosts: Number(process.env.INSTAGRAM_TOTAL_POSTS!),
     isProfile: process.env.INSTAGRAM_IS_PROFILE === 'true',
     isHashtag: process.env.INSTAGRAM_IS_HASHTAG === 'true',
+    fbDtsg: process.env.INSTAGRAM_FB_DTSG!,
   },
   tiktok: {
     isTikTok: process.env.IS_TIKTOK === 'true',

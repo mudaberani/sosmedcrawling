@@ -29,9 +29,9 @@ class InstagramCrawler {
     });
 
     await this.page.type('input[name="username"]', username);
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(Math.floor(Math.random() * 4000) + 1000);
     await this.page.type('input[name="password"]', password);
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(Math.floor(Math.random() * 4000) + 1000);
     await this.page.click('button[type="submit"]');
     await this.page.waitForNavigation();
   }
@@ -42,20 +42,20 @@ class InstagramCrawler {
       await notNowButton1.click();
     }
 
-    await this.page.waitForTimeout(10000);
+    await this.page.waitForTimeout(Math.floor(Math.random() * 4000) + 1000);
 
     const notNowButton2 = await this.page.$('button:has-text("Not Now")');
     if (notNowButton2) {
       await notNowButton2.click();
     }
 
-    await this.page.waitForTimeout(10000);
+    await this.page.waitForTimeout(Math.floor(Math.random() * 4000) + 1000);
   }
 
   async crawlHashtag(hashtag: string, totalPosts: number) {
     await this.page.goto(`https://www.instagram.com/explore/tags/${hashtag}/`);
 
-    await this.page.waitForTimeout(10000);
+    await this.page.waitForTimeout(Math.floor(Math.random() * 4000) + 1000);
     await this.page.waitForLoadState('networkidle');
 
     const allUrls: Set<string> = new Set();
@@ -92,7 +92,6 @@ class InstagramCrawler {
 
   private saveToFile(hashtag: string, allUrls: Set<string>) {
     const filePath = this.storage.save('instagram', 'hashtags', hashtag, allUrls);
-    console.log(`File instagram hashtags saved to: ${filePath}`);
   }
 }
 

@@ -2,6 +2,7 @@ import InstagramCrawler from './services/InstagramCrawler';
 import TikTokCrawler from './services/TikTokCrawler';
 import FileStorage from './storage/FileStorage';
 import { config } from './config';
+import InstagramDetailService from './services/InstagramDetailService';
 
 (async () => {
   const storage = new FileStorage();
