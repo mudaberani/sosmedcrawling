@@ -38,20 +38,6 @@ class FileStorage implements Storage {
     }
   }
 
-  private getPostIdFromUrl(url: string): string {
-    let postId = '';
-
-    if (url.includes('instagram.com')) {
-      const postIdMatch = url.match(/\/p\/([^/]+)\//);
-      postId = postIdMatch ? postIdMatch[1] : '';
-    } else if (url.includes('tiktok.com')) {
-      const postIdMatch = url.match(/video\/(\d+)/);
-      postId = postIdMatch ? postIdMatch[1] : '';
-    }
-
-    return postId;
-  }
-
   private formatDate(date: Date): string {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -60,7 +46,7 @@ class FileStorage implements Storage {
     const minutes = String(date.getMinutes()).padStart(2, '0');
     const seconds = String(date.getSeconds()).padStart(2, '0');
 
-    return `${year}-${month}-${day}-${hours}:${minutes}:${seconds}`;
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   }
 
   async save(platform: string, category: string, name: string, urls: Set<string>): Promise<string> {
@@ -68,7 +54,6 @@ class FileStorage implements Storage {
     const timestamp = new Date().toISOString().replace(/:/g, '-');
     const dirPath = path.join(this.baseDir, platform, category);
 
-    // Ensure the directory exists
     this.createDirectoryIfNotExists(dirPath);
 
     const filePath = path.join(dirPath, `${name}_${timestamp}.csv`);
@@ -76,10 +61,8 @@ class FileStorage implements Storage {
       flags: 'a',
     });
 
-    // Write the header row
     file.write('id,code,taken_at,image_url,username,like_count,view_count,comment_count,url_post\n');
 
-    // Write the data rows
     let id = 1;
     for (const url of deduplicatedUrls) {
       const InstagramDetail = new InstagramDetailService();

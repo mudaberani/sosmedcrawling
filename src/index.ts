@@ -4,6 +4,10 @@ import FileStorage from './storage/FileStorage';
 import { config } from './config';
 import CsvMergerService from './services/CsvMergerService';
 
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 (async () => {
   const storage = new FileStorage();
   const Instagram = new InstagramCrawler(storage);
@@ -17,30 +21,42 @@ import CsvMergerService from './services/CsvMergerService';
 
     if (isHashtag) {
       const { hashtag, totalPosts } = config.instagram;
-      await Instagram.init();
-      await Instagram.login();
-      await Instagram.dismissNotNowButtons();
-      await Instagram.crawlHashtag(hashtag, totalPosts);
-      await Instagram.close();
+      const instagramHashtags = hashtag.split(',');
+      if (instagramHashtags.length > 0) {
+        for (const hashtag of instagramHashtags) {
+          await Instagram.init();
+          await Instagram.login();
+          await Instagram.dismissNotNowButtons();
+          await Instagram.crawlHashtag(hashtag, totalPosts);
+          await Instagram.close();
 
-      const sourceDir = 'results/instagram/hashtags';
-      const name = hashtag;
-      const outputDir = `${sourceDir}/merged`;
-      await CsvMergerService.mergeCsvFiles(sourceDir, name, outputDir);
+          const sourceDir = 'results/instagram/hashtags';
+          const name = hashtag;
+          const outputDir = `${sourceDir}/merged`;
+          await CsvMergerService.mergeCsvFiles(sourceDir, name, outputDir);
+          await delay(60000);
+        }
+      }
     }
 
     if (isProfile) {
       const { profile, totalPosts } = config.instagram;
-      await Instagram.init();
-      await Instagram.login();
-      await Instagram.dismissNotNowButtons();
-      await Instagram.crawlProfile(profile, totalPosts);
-      await Instagram.close();
+      const instagramProfiles = profile.split(',');
+      if (instagramProfiles.length > 0) {
+        for (const profile of instagramProfiles) {
+          await Instagram.init();
+          await Instagram.login();
+          await Instagram.dismissNotNowButtons();
+          await Instagram.crawlProfile(profile, totalPosts);
+          await Instagram.close();
 
-      const sourceDir = 'results/instagram/profiles';
-      const name = profile;
-      const outputDir = `${sourceDir}/merged`;
-      await CsvMergerService.mergeCsvFiles(sourceDir, name, outputDir);
+          const sourceDir = 'results/instagram/profiles';
+          const name = profile;
+          const outputDir = `${sourceDir}/merged`;
+          await CsvMergerService.mergeCsvFiles(sourceDir, name, outputDir);
+          await delay(60000);
+        }
+      }
     }
   }
 

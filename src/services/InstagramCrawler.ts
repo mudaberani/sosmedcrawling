@@ -103,7 +103,7 @@ class InstagramCrawler {
       });
 
       urls.forEach((url) => allUrls.add(url));
-      await this.page.waitForTimeout(10000);
+      await this.page.waitForTimeout(Math.floor(Math.random() * 4000) + 1000);
 
       if ((i + 1) % 10 === 0) {
         await this.page.evaluate(() => {
@@ -125,7 +125,7 @@ class InstagramCrawler {
   }
 
   private saveToFile(category: string, hashtag: string, allUrls: Set<string>) {
-    const filePath = this.storage.save('instagram', category, hashtag, allUrls);
+    this.storage.save('instagram', category, hashtag, allUrls);
   }
 }
 

@@ -29,23 +29,26 @@ class CsvMergerService {
         uniqueDataMap.set(row.code, row);
       }
     }
+
     mergedData = Array.from(uniqueDataMap.values()).sort((a, b) => new Date(b.taken_at).getTime() - new Date(a.taken_at).getTime());
 
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir);
     }
 
-    const timestamp = new Date().toISOString().slice(0, 10);
-    const outputFilePath = path.join(outputDir, `${name}-${timestamp}.csv`);
-    const writeStream = fs.createWriteStream(outputFilePath);
+    if (mergedData.length > 0) {
+      const timestamp = new Date().toISOString().slice(0, 10);
+      const outputFilePath = path.join(outputDir, `${name}-${timestamp}.csv`);
+      const writeStream = fs.createWriteStream(outputFilePath);
 
-    writeStream.write(Object.keys(mergedData[0]).join(',') + '\n');
+      writeStream.write(Object.keys(mergedData[0]).join(',') + '\n');
 
-    for (const row of mergedData) {
-      writeStream.write(Object.values(row).join(',') + '\n');
+      for (const row of mergedData) {
+        writeStream.write(Object.values(row).join(',') + '\n');
+      }
+
+      writeStream.end();
     }
-
-    writeStream.end();
   }
 }
 
