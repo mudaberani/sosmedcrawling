@@ -1,4 +1,6 @@
-import { chromium, Browser, Page } from 'playwright';
+import { Browser, Page } from 'playwright';
+import { chromium } from 'playwright-extra';
+import stealth from 'puppeteer-extra-plugin-stealth';
 import { config } from '../config';
 import { Storage } from '../storage';
 
@@ -13,11 +15,19 @@ class InstagramCrawler {
 
   async init() {
     const { headless } = config.browser;
-    this.browser = await chromium.launch({ headless: headless });
+    chromium.use(stealth());
+    this.browser = await chromium.launch({
+      headless: headless,
+    });
+
     const context = await this.browser.newContext();
 
     this.page = await context.newPage();
     await this.page.setViewportSize(config.viewport);
+  }
+
+  async randomDelay(min: number = 1000, max: number = 5000) {
+    await this.page.waitForTimeout(Math.random() * (max - min + 1) + min);
   }
 
   async login() {
@@ -29,9 +39,9 @@ class InstagramCrawler {
     });
 
     await this.page.type('input[name="username"]', username);
-    await this.page.waitForTimeout(Math.floor(Math.random() * 4000) + 1000);
+    await this.randomDelay();
     await this.page.type('input[name="password"]', password);
-    await this.page.waitForTimeout(Math.floor(Math.random() * 4000) + 1000);
+    await this.randomDelay();
     await this.page.click('button[type="submit"]');
     await this.page.waitForNavigation();
   }
@@ -42,14 +52,14 @@ class InstagramCrawler {
       await notNowButton1.click();
     }
 
-    await this.page.waitForTimeout(Math.floor(Math.random() * 4000) + 1000);
+    await this.randomDelay();
 
     const notNowButton2 = await this.page.$('button:has-text("Not Now")');
     if (notNowButton2) {
       await notNowButton2.click();
     }
 
-    await this.page.waitForTimeout(Math.floor(Math.random() * 4000) + 1000);
+    await this.randomDelay();
   }
 
   async crawlHashtag(hashtag: string, totalPosts: number) {
@@ -89,7 +99,7 @@ class InstagramCrawler {
   async crawlProfile(username: string, totalPosts: number) {
     await this.page.goto(`https://www.instagram.com/${username}/`);
 
-    await this.page.waitForTimeout(Math.floor(Math.random() * 4000) + 1000);
+    await this.randomDelay();
     await this.page.waitForLoadState('networkidle');
 
     const allUrls: Set<string> = new Set();
@@ -103,7 +113,7 @@ class InstagramCrawler {
       });
 
       urls.forEach((url) => allUrls.add(url));
-      await this.page.waitForTimeout(Math.floor(Math.random() * 4000) + 1000);
+      await this.randomDelay();
 
       if ((i + 1) % 10 === 0) {
         await this.page.evaluate(() => {
