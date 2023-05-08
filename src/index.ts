@@ -23,12 +23,12 @@ function delay(ms: number): Promise<void> {
       const { hashtag, totalPosts } = config.instagram;
       const instagramHashtags = hashtag.split(',');
       if (instagramHashtags.length > 0) {
+        await Instagram.init();
+        await Instagram.login();
+        await Instagram.dismissNotNowButtons();
+
         for (const hashtag of instagramHashtags) {
-          await Instagram.init();
-          await Instagram.login();
-          await Instagram.dismissNotNowButtons();
           await Instagram.crawlHashtag(hashtag, totalPosts);
-          await Instagram.close();
 
           const sourceDir = 'results/instagram/hashtags';
           const name = hashtag;
@@ -36,6 +36,8 @@ function delay(ms: number): Promise<void> {
           await CsvMergerService.mergeCsvFiles(sourceDir, name, outputDir);
           await delay(60000);
         }
+
+        await Instagram.close();
       }
     }
 
@@ -43,12 +45,12 @@ function delay(ms: number): Promise<void> {
       const { profile, totalPosts } = config.instagram;
       const instagramProfiles = profile.split(',');
       if (instagramProfiles.length > 0) {
+        await Instagram.init();
+        await Instagram.login();
+        await Instagram.dismissNotNowButtons();
+
         for (const profile of instagramProfiles) {
-          await Instagram.init();
-          await Instagram.login();
-          await Instagram.dismissNotNowButtons();
           await Instagram.crawlProfile(profile, totalPosts);
-          await Instagram.close();
 
           const sourceDir = 'results/instagram/profiles';
           const name = profile;
@@ -56,6 +58,8 @@ function delay(ms: number): Promise<void> {
           await CsvMergerService.mergeCsvFiles(sourceDir, name, outputDir);
           await delay(60000);
         }
+
+        await Instagram.close();
       }
     }
   }
